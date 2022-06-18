@@ -1,4 +1,5 @@
 // TODO: import module bila dibutuhkan di sini
+const fs = require("fs");
 
 // ! JANGAN DIMODIFIKASI
 let file1 = "./data1.json";
@@ -18,7 +19,52 @@ let modifyFile3 = (val) => {
 
 // TODO: Kerjakan bacaData
 // gunakan variabel file1, file2, dan file3
-const bacaData = null;
+
+let dataBaru = [];
+const bacaData = (fungsiCallBack) => {
+  fs.readFile(file1, "utf-8", (error, success) => {
+    if (error) {
+      return fungsiCallBack(error);
+    }
+    const hasilBacaData = JSON.parse(success);
+    const potongBacaData = hasilBacaData.message.split(" ");
+    masukkanData(potongBacaData[1]);
+
+    fs.readFile(file2, "utf-8", (error, success) => {
+      if (error) {
+        return fungsiCallBack(error);
+      }
+      const hasilBacaData = JSON.parse(success);
+      const potongBacaData = hasilBacaData[0].message.split(" ");
+      masukkanData(potongBacaData[1]);
+
+      fs.readFile(file3, "utf-8", (error, success) => {
+        if (error) {
+          return fungsiCallBack(error);
+        }
+        const hasilBacaData = JSON.parse(success);
+        const potongBacaData = hasilBacaData[0]["data"].message.split(" ");
+        masukkanData(potongBacaData[1]);
+        fungsiCallBack(
+          null,
+          dataBaru.filter((value, index, array) => {
+            // console.log(value);
+            // console.log(index);
+            // console.log(array);
+            // console.log(array.indexOf(value) === index);
+            return array.indexOf(value) === index;
+          })
+        );
+      });
+    });
+  });
+};
+
+const masukkanData = (dataMasukan) => {
+  dataBaru.push(dataMasukan);
+};
+
+// console.log(dataBaru);
 
 // ! JANGAN DIMODIFIKASI
 module.exports = {
